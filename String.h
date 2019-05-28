@@ -13,7 +13,6 @@ class String {
     private:
     std::string m_str;
 
-    // TODO support char
     template<typename T>
     std::string getStdStr(T s) {
         if(typeid(s) == typeid(std::string)) {
@@ -23,15 +22,22 @@ class String {
         } else if(typeid(s) == typeid(String)) {
             return static_cast<String>(s).m_str;
         } else {
-            throw std::invalid_argument("ABC");
+            throw 
+                std::invalid_argument(
+                    "Argument is not from type String, std::string, char or const char*"
+                );
         }
     }
 
+    std::string getStdStr(char c) {
+        return std::string() += c;
+    }
+
     public:
-    // TODO support char
     String() { m_str = ""; }
     String(std::string str) { m_str = str; }
     String(const char* cstr) { m_str = std::string(cstr); }
+    String(char c) { m_str = std::string() += c; }
 
     //casts 
     std::string toStdStr() { return m_str; }
@@ -81,6 +87,10 @@ class String {
         return this->compare(s);
     }
 
+    inline bool equals(const char* s) {
+        return this->compare(s);
+    }
+
     int length() {
         return m_str.length();
     }
@@ -90,13 +100,10 @@ class String {
     }
 
     // string formatting 
-    String concat (const String &s) {
-        m_str += s.m_str;
-        return String(m_str);
-    }
-    
-    std::string concat(const std::string &s) {
-        return m_str + s; 
+    template<typename S>
+    std::string concat(const S &s) {
+        m_str += getStdStr(s);
+        return m_str;
     }
 
     void copyTo(String &s) { s.m_str = m_str; }

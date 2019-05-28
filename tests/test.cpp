@@ -9,6 +9,14 @@ void message(bool condition, std::string msg) {
     }
 }
 
+void t_construct() {
+    String s1("hallo");
+    String s2('h');
+    String s3(std::string("hallo"));
+
+    message(s1 == s3 && s2 == "h", "contructor");
+}
+
 void t_toStdStr() {
     message(String("hallo").toStdStr() == std::string("hallo"),
             "toStdStr");
@@ -290,12 +298,12 @@ void t_split() {
     std::vector<std::string> vec1 = s.split(ds);
     std::vector<std::string> vec2 = s.split(dS);
     std::vector<std::string> vec3 = s.split(dcst);
-    // std::vector<std::string> vec4 = s.split(dc);
+    std::vector<std::string> vec4 = s.split(dc);
     std::vector<std::string> vec5 = s.split(" ");
-    // std::vector<std::string> vec6 = s.split(' ');
+    std::vector<std::string> vec6 = s.split(' ');
 
-    bool t1 = (vec == vec1) && (vec == vec2) && (vec == vec3); // && (vec == vec4);
-    bool t2 = (vec == vec5); // && (vec == vec6);
+    bool t1 = (vec == vec1) && (vec == vec2) && (vec == vec3) && (vec == vec4);
+    bool t2 = (vec == vec5) && (vec == vec6);
 
     message(t1 == t2, "split");
 }
@@ -394,6 +402,7 @@ void t_op_plusEqual() {
 }
 
 void t_stdin() {
+    std::cout << "Write 'hello' to check if cin works correctly:" << std::endl;
     String s;
     std::cin >> s;
     message(s == "hello", "cin");
@@ -412,6 +421,7 @@ int main(void)
 
     std::cout << std::endl;
     std::cout << "Method Tests:" << std::endl;
+    t_construct();
     t_toStdStr();
     t_toCStr();
     t_toCArr();
