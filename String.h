@@ -5,13 +5,30 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <cstring>
+#include <stdexcept>
 
 class String {
 
     private:
     std::string m_str;
 
+    // TODO support char
+    template<typename T>
+    std::string getStdStr(T s) {
+        if(typeid(s) == typeid(std::string)) {
+            return s;
+        } else if(typeid(s) == typeid(const char*)) {
+            return std::string(s);
+        } else if(typeid(s) == typeid(String)) {
+            return static_cast<String>(s).m_str;
+        } else {
+            throw std::invalid_argument("ABC");
+        }
+    }
+
     public:
+    // TODO support char
     String() { m_str = ""; }
     String(std::string str) { m_str = str; }
     String(const char* cstr) { m_str = std::string(cstr); }
@@ -44,25 +61,23 @@ class String {
         }
     }
 
-    bool compare(String &s) {
-        if(m_str == s.m_str) 
+    template<typename S>
+    bool compare(S &s) {
+        if(m_str == getStdStr(s)) 
             return true;
         else 
             return false;
     }
 
-    bool compare(const std::string &s) {
-        if(m_str == s) 
+    bool compare(const char* s) {
+        if(std::strcmp(s, m_str.c_str()) == 0)
             return true;
-        else 
+        else
             return false;
     }
 
-    inline bool equals(String &s) {
-        return this->compare(s);
-    }
-
-    inline bool equals(const std::string &s) {
+    template<typename S>
+    inline bool equals(S &s) {
         return this->compare(s);
     }
 
@@ -86,20 +101,15 @@ class String {
 
     void copyTo(String &s) { s.m_str = m_str; }
     void copyTo(std::string &s) { s = m_str; }
+
+    template<typename S>
+    int count(S str) {
+        return this->find(getStdStr(str)).size();
+    }
     
-    int count(const String s) {
-        return this->find(s).size();
-    }
-
-    int count(const std::string s) {
-        return this->find(s).size();
-    }
-
-    int count(const char* s) {
-        return this->find(s).size(); 
-    }
-
-    std::vector<int> find(const std::string s) {
+    template<typename S>
+    std::vector<int> find(S str) {
+        std::string s = getStdStr(str);
         std::vector<int> vec;
         std::size_t pos = m_str.find(s);
         while(pos != std::string::npos) {
@@ -108,204 +118,113 @@ class String {
         } return vec;
     }
 
-    std::vector<int> find(const String s) {
-        return this->find(s.m_str); 
+    template<typename S>
+    inline std::vector<int> findAll(S str) {
+        return this->find(str);
     }
 
-    std::vector<int> find(const char* s) {
-        return this->find(std::string(s)); 
-    }
-
-    inline std::vector<int> findAll(const std::string s) {
-        return this->find(s);
-    }
-
-    inline std::vector<int> findAll(const String s) {
-        return this->find(s);
-    }
-
-    inline std::vector<int> findAll(const char* s) {
-        return this->find(s);
-    }
-
-    int findFirst(const std::string s) {
-        std::size_t pos = m_str.find(s);
+    template<typename S>
+    int findFirst(S str) {
+        std::size_t pos = m_str.find(getStdStr(str));
         if(pos != std::string::npos){
             int i = static_cast<int>(pos);
             return i;
         } return 0;
     }
 
-    int findFirst(const String s) {
-        return this->findFirst(s.m_str);
+    template<typename S>
+    inline int indexOf(S str) {
+        return this->findFirst(str);
     }
 
-    int findFirst(const char* s) {
-        return this->findFirst(std::string(s));
-    }
-
-    inline int indexOf(const std::string s) {
-        return this->findFirst(s);
-    }
-
-    inline int indexOf(const String s) {
-        return this->findFirst(s.m_str);
-    }
-
-    inline int indexOf(const char* s) {
-        return this->findFirst(s);
-    }
-
-    int findLast(const String s) {
-        return this->findLast(s.m_str);
-    }
-
-    int findLast(const std::string s) {
-        std::size_t pos = m_str.rfind(s);
+    template<typename S>
+    int findLast(S str) {
+        std::size_t pos = m_str.rfind(getStdStr(str));
         if(pos != std::string::npos){
             int i = static_cast<int>(pos);
             return i;
         } return 0;
     }
 
-    int findLast(const char* s) {
-        return this->findLast(std::string(s));
+    template<typename S>
+    inline int lastIndexOf(S str) {
+        return this->findLast(str);
     }
 
-    inline int lastIndexOf(const String s) {
-        return this->findLast(s);
-    }
-
-    inline int lastIndexOf(const std::string s) {
-        return this->findLast(s);
-    }
-
-    inline int lastIndexOf(const char* s) {
-        return this->findLast(s);
-    }
-
-    std::string replace(const std::string oldstr, const std::string newstr) {
-        std::size_t pos = m_str.find(oldstr);
+    template<typename S1, typename S2>
+    std::string replace(S1 oldstr, S2 newstr) {
+        std::string o = getStdStr(oldstr);
+        std::string n = getStdStr(newstr);
+        std::size_t pos = m_str.find(o);
         while(pos != std::string::npos) {
-            m_str.replace(pos, oldstr.length(), newstr);
-            pos = m_str.find(oldstr,pos+1);
+            m_str.replace(pos, o.length(), n);
+            pos = m_str.find(o,pos+1);
         }
         return m_str;
     }
 
-    std::string replace(const char* oldstr, const char* newstr) {
-        return this->replace(std::string(oldstr), std::string(newstr)); 
-    }
-
-    std::string replace(const String oldstr, const String newstr) {
-        return this->replace(std::string(oldstr), std::string(newstr));
-    }
-
-    std::string replaceFirst(const std::string oldstr, const std::string newstr) {
-        std::size_t pos = m_str.find(oldstr);
+    template<typename S1, typename S2>
+    std::string replaceFirst(S1 oldstr, S2 newstr) {
+        std::string o = getStdStr(oldstr);
+        std::string n = getStdStr(newstr);
+        std::size_t pos = m_str.find(o);
         if(pos != std::string::npos) {
-            m_str.replace(pos, oldstr.length(), newstr);
+            m_str.replace(pos, o.length(), n);
         } return m_str;
     }
 
-    std::string replaceFirst(const char* oldstr, const char* newstr) {
-        return this->replaceFirst(std::string(oldstr), std::string(newstr));
-    }
-
-    std::string replaceFirst(const String oldstr, const String newstr) {
-        return this->replaceFirst(oldstr.m_str, newstr.m_str);
-    }
-
-    std::string replaceLast(const std::string oldstr, const std::string newstr){
-        std::size_t pos = m_str.rfind(oldstr);
+    template<typename S1, typename S2>
+    std::string replaceLast(S1 oldstr, S2 newstr) {
+        std::string o = getStdStr(oldstr);
+        std::string n = getStdStr(newstr);
+        std::size_t pos = m_str.rfind(o);
         if(pos != std::string::npos) {
-            m_str.replace(pos, oldstr.length(), newstr);
+            m_str.replace(pos, o.length(), n);
         } return m_str;
     }
 
-    std::string replaceLast(const String oldstr, const String newstr) {
-        return this->replaceLast(oldstr.m_str, newstr.m_str); 
-    }
-
-    std::string replaceLast(const char* oldstr, const char* newstr) {
-        return this->replaceLast(std::string(oldstr), std::string(newstr));
-    }
-
-    std::string replaceHead(const int headsize, const std::string newstr){
+    template<typename S>
+    std::string replaceHead(const int headsize, S newstr){
         m_str.erase(0,headsize);
-        m_str = newstr + m_str;
+        m_str = getStdStr(newstr) + m_str;
         return m_str;
     }
 
-    std::string replaceHead(const int headsize, const String newstr){
-        return this->replaceHead(headsize, newstr.m_str);
-    }
-
-    std::string replaceHead(const int headsize, const char* newstr){
-        return this->replaceHead(headsize, std::string(newstr));
-    }
-
-
-    std::string replaceTail(const int tailsize, const std::string newstr){
+    template<typename S>
+    std::string replaceTail(const int tailsize, S newstr){
         m_str.erase(m_str.end()-tailsize, m_str.end());
-        m_str += newstr;
+        m_str += getStdStr(newstr);
         return m_str;
     }
 
-    std::string replaceTail(const int tailsize, const String newstr){
-        return this->replaceTail(tailsize, newstr.m_str);
-    }
-
-    std::string replaceTail(const int tailsize, const char* newstr){
-        return this->replaceTail(tailsize, std::string(newstr));
-    }
-
-    std::string erase(const std::string erasestr){
-        std::string::size_type n = erasestr.length();
-        for (std::string::size_type i = m_str.find(erasestr); i != std::string::npos; 
-            i = m_str.find(erasestr)) {
+    template<typename S>
+    std::string erase(S erasestr){
+        std::string s = getStdStr(erasestr);
+        std::string::size_type n = s.length();
+        for (std::string::size_type i = m_str.find(s); i != std::string::npos; 
+            i = m_str.find(s)) {
             m_str.erase(i, n);    
         }
         return m_str;
     } 
 
-    std::string erase(const String erasestr){
-        return this->erase(erasestr.m_str);
-    }
-
-    std::string erase(const char* erasestr){
-        return this->erase(std::string(erasestr));
-    }
-
-    std::string eraseFirst(const std::string erasestr){
-        std::size_t pos = m_str.find(erasestr);
+    template<typename S>
+    std::string eraseFirst(S erasestr){
+        std::string s = getStdStr(erasestr);
+        std::size_t pos = m_str.find(s);
         if(pos != std::string::npos){
-            m_str.erase(pos, erasestr.length());
+            m_str.erase(pos, s.length());
         } return m_str;
     } 
 
-    std::string eraseFirst(const String eraseFirststr){
-        return this->eraseFirst(eraseFirststr.m_str);
-    }
-
-    std::string eraseFirst(const char* eraseFirststr){
-        return this->eraseFirst(std::string(eraseFirststr));
-    }
-
-    std::string eraseLast(std::string erasestr){
-        std::size_t pos = m_str.rfind(erasestr);
+    template<typename S>
+    std::string eraseLast(S erasestr){
+        std::string s = getStdStr(erasestr);
+        std::size_t pos = m_str.rfind(s);
         if(pos != std::string::npos){
-            m_str.erase(pos, erasestr.length());
+            m_str.erase(pos, s.length());
         } return m_str;
     } 
-
-    std::string eraseLast(const String eraseLaststr){
-        return this->eraseLast(eraseLaststr.m_str);
-    }
-
-    std::string eraseLast(const char* eraseLaststr){
-        return this->eraseLast(std::string(eraseLaststr));
-    }
 
     std::string eraseHead(const int headsize){
         m_str.erase(0,headsize);
@@ -317,32 +236,22 @@ class String {
         return m_str;
     } 
 
-    std::vector<std::string> split(const std::string delimiter){
+
+    // TODO support char
+    template<typename S>
+    std::vector<std::string> split(S delimiter){
+        std::string s = getStdStr(delimiter);
         std::vector<std::string> parts;
         std::string str = m_str;
         std::size_t pos = 0;
         std::string token;
-        while((pos = str.find(delimiter)) != std::string::npos){
+        while((pos = str.find(s)) != std::string::npos){
             token = str.substr(0,pos);
             parts.push_back(token);
-            str.erase(0, pos + delimiter.length());
+            str.erase(0, pos + s.length());
         }
         parts.push_back(str);
         return parts;
-    }
-
-    std::vector<std::string> split(const String delimiter) {
-        return this->split(delimiter.m_str);
-    }
-
-    std::vector<std::string> split(const char* delimiter) {
-        return this->split(std::string(delimiter));
-    }
-
-    std::vector<std::string> split(const char delimiter) {
-        std::string s;
-        s += delimiter;
-        return this->split(s);
     }
 
     void swap(std::string &str2) {

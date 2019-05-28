@@ -1,8 +1,5 @@
 #include "../String.h"
 #include "./lib/textformatpp.h"
-#include <iostream>
-#include <vector>
-#include <cstring>
 
 void message(bool condition, std::string msg) {
     if(condition) {
@@ -293,12 +290,12 @@ void t_split() {
     std::vector<std::string> vec1 = s.split(ds);
     std::vector<std::string> vec2 = s.split(dS);
     std::vector<std::string> vec3 = s.split(dcst);
-    std::vector<std::string> vec4 = s.split(dc);
+    // std::vector<std::string> vec4 = s.split(dc);
     std::vector<std::string> vec5 = s.split(" ");
-    std::vector<std::string> vec6 = s.split(' ');
+    // std::vector<std::string> vec6 = s.split(' ');
 
-    bool t1 = (vec == vec1) && (vec == vec2) && (vec == vec3) && (vec == vec4);
-    bool t2 = (vec == vec5) && (vec == vec6);
+    bool t1 = (vec == vec1) && (vec == vec2) && (vec == vec3); // && (vec == vec4);
+    bool t2 = (vec == vec5); // && (vec == vec6);
 
     message(t1 == t2, "split");
 }
@@ -446,4 +443,7 @@ int main(void)
     t_fillLeft_padLeft();
     t_fillRight_padRight();
     t_stdin();
+
+    std::cout << std::endl;
+
 }

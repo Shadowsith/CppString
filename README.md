@@ -1,7 +1,10 @@
 # CppString
-STL header-only string class/lib which is orientated to Java and C# string classes
+STL header-only and generic string class/lib which is orientated to Java and C# string classes
 
 ## Functionality
 
-## Errors
-* toCStr
+## Errors/Bugs
+* nothing known
+
+## TODO
+* Operation overloading replacing with templates
