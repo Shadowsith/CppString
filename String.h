@@ -19,7 +19,6 @@ class String {
     //casts 
     std::string toStdStr() { return m_str; }
 
-    // TODO error
     const char* toCStr() { return m_str.c_str(); }
 
     std::vector<char> toCharArr() {
@@ -202,7 +201,6 @@ class String {
         return this->replace(std::string(oldstr), std::string(newstr));
     }
 
-    // TODO error
     std::string replaceFirst(const std::string oldstr, const std::string newstr) {
         std::size_t pos = m_str.find(oldstr);
         if(pos != std::string::npos) {

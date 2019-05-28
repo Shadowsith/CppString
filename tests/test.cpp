@@ -2,6 +2,7 @@
 #include "./lib/textformatpp.h"
 #include <iostream>
 #include <vector>
+#include <cstring>
 
 void message(bool condition, std::string msg) {
     if(condition) {
@@ -20,7 +21,7 @@ void t_toStdStr() {
 void t_toCStr() {
     const char* c = "hallo";
     String s("hallo");
-    message(s.toCStr() == c, "toCStr");
+    message(std::strcmp(s.toCStr(), c) == 0, "toCStr");
 }
 
 void t_toCArr() {
@@ -43,7 +44,8 @@ void t_empty() {
 }
 
 void t_emptyOrWS() {
-    message(String("   ").isEmptyOrWhiteSpace() && String("").isEmptyOrWhiteSpace(),
+    message(String("   ").isEmptyOrWhiteSpace() 
+            && String("").isEmptyOrWhiteSpace(),
             "isEmptyOrWhiteSpace");
 }
 
@@ -394,6 +396,12 @@ void t_op_plusEqual() {
     message(s == "hello", "Operator+=");
 }
 
+void t_stdin() {
+    String s;
+    std::cin >> s;
+    message(s == "hello", "cin");
+}
+
 int main(void)
 {
     std::cout << std::endl << "Operator Tests:" << std::endl;
@@ -437,4 +445,5 @@ int main(void)
     t_trimRight();
     t_fillLeft_padLeft();
     t_fillRight_padRight();
+    t_stdin();
 }
