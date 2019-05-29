@@ -1,7 +1,18 @@
 # CppString
 STL header-only and generic string class/lib which is orientated to Java and C# string classes
 
-## Functionality
+## Targets
+* simplify std::string usage
+* STL only
+* fully compatiblity to std::string 
+* generic methods to avoid lot of method overloading
+
+## Errors/Bugs
+* nothing known
+
+## Usage
+
+## Reference
 ### Private Members
 | Name  | Type        |
 |-------|-------------|
@@ -20,7 +31,7 @@ STL header-only and generic string class/lib which is orientated to Java and C# 
 | ```String(double)```      	| Casts and loads double into m\_str                   	|
 | ```String(bool)```        	| Initialize String with m\_str equal "true" or "false"	|
 
-### Operator overloading
+### Operator
 | Operator                  	| Return Value        	| Descriptions                                                                                                          	|
 |---------------------------	|---------------------	|-----------------------------------------------------------------------------------------------------------------------	|
 | ```std::string() const``` 	| ```std::string```   	| Writes m_str into std::string                                                                                         	|
@@ -36,8 +47,19 @@ STL header-only and generic string class/lib which is orientated to Java and C# 
 
 ### Methods
 #### Private
+| Name                        	| Return Value 	| Description                                                                                                                                                     	|
+|-----------------------------	|--------------	|-----------------------------------------------------------------------------------------------------------------------------------------------------------------	|
+| ```getStdStr(typename S)``` 	| std::string  	| Method template which retruns std::string from const char*, std::string and String. If another type is given it will throw  an std::invalid_argument exception. 	|
+| ```getStdStr(char c)```     	| std::string  	| Casts a char into std::string                                                                                                                                   	|
 
 #### Public
+| Name                         | Return Value | Description                                            |
+|------------------------------|--------------|--------------------------------------------------------|
+| ```charAt(const int)```      | char         |                                                        |
+| ```compare(typename S &s)``` | bool         | Compares String with String or std::string             |
+| ```compare(const char*)```   | bool         | Compares String with const char*                       |
+| ```concat(const S &s)```     | std::string  | Concats String with const char*, std::string or String |
+| ``` ```                      |              |                                                        |
 
-## Errors/Bugs
-* nothing known
+
+
