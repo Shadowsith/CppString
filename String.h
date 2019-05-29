@@ -38,11 +38,26 @@ class String {
     String(std::string str) { m_str = str; }
     String(const char* cstr) { m_str = std::string(cstr); }
     String(char c) { m_str = std::string() += c; }
+    String(int i) { m_str = std::to_string(i); }
+    String(float f) { m_str = std::to_string(f); }
+    String(double d) { m_str = std::to_string(d); }
+    String(short s) { m_str = std::to_string(s); }
+    String(long l) { m_str = std::to_string(l); }
+    String(bool b) { if(b) m_str = "true"; else m_str = "false"; }
 
     //casts 
     std::string toStdStr() { return m_str; }
-
     const char* toCStr() { return m_str.c_str(); }
+    int toInt() { return std::stoi(m_str); }
+    long toLong() { return std::stol(m_str); }
+    float toFloat() { return std::stof(m_str); }
+    double toDouble() { return std::stod(m_str); }
+    bool toBool() {
+        if(m_str == "false" || m_str == "0" || m_str == "")
+            return false;
+        else
+            return true;
+    }
 
     std::vector<char> toCharArr() {
         std::vector<char> vec;

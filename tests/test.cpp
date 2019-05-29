@@ -13,8 +13,10 @@ void t_construct() {
     String s1("hallo");
     String s2('h');
     String s3(std::string("hallo"));
+    String s4(5);
+    String s5(5.0);
 
-    message(s1 == s3 && s2 == "h", "contructor");
+    message(s1 == s3 && s2 == "h" && s4 == "5" && s5 == "5.000000", "contructor");
 }
 
 void t_toStdStr() {
@@ -27,6 +29,23 @@ void t_toCStr() {
     const char* c = "hallo";
     String s("hallo");
     message(std::strcmp(s.toCStr(), c) == 0, "toCStr");
+}
+
+void t_casts() {
+    int i = 5;
+    long l = 5;
+    float f = 5.5;
+    double d = 5.5;
+    bool b = false;
+
+    bool res = true;
+
+    res = res == (String(i).toInt() == 5);
+    res = res == (String(l).toLong() == 5);
+    res = res == (String(f).toFloat() == 5.5);
+    res = res == (String(d).toDouble() == 5.5);
+    res = res == (String(b).toBool() == b);
+    message(res, "casting");
 }
 
 void t_toCArr() {
@@ -425,6 +444,7 @@ int main(void)
     t_toStdStr();
     t_toCStr();
     t_toCArr();
+    t_casts();
     t_charAt();
     t_empty();
     t_emptyOrWS();
