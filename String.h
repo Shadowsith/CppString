@@ -13,8 +13,8 @@ class String {
     private:
     std::string m_str;
 
-    template<typename T>
-    std::string getStdStr(T s) {
+    template<typename S>
+    std::string getStdStr(S s) {
         if(typeid(s) == typeid(std::string)) {
             return s;
         } else if(typeid(s) == typeid(const char*)) {
@@ -44,7 +44,7 @@ class String {
     String(long l) { m_str = std::to_string(l); }
     String(bool b) { if(b) m_str = "true"; else m_str = "false"; }
 
-    //casts 
+    // casts 
     std::string toStdStr() { return m_str; }
     const char* toCStr() { return m_str.c_str(); }
     int toInt() { return std::stoi(m_str); }
@@ -66,9 +66,13 @@ class String {
         return vec;
     }
 
-    char charAt(const int pos) { return m_str.at(pos); }
+    char charAt(const int pos) { 
+        return m_str.at(pos); 
+    }
 
-    bool isEmpty() { return m_str.empty(); }
+    bool isEmpty() { 
+        return m_str.empty(); 
+    }
 
     bool isEmptyOrWhiteSpace() {
         if(m_str.empty()) {
@@ -113,7 +117,6 @@ class String {
         return this->length();
     }
 
-    // string formatting 
     template<typename S>
     std::string concat(const S &s) {
         m_str += getStdStr(s);
@@ -257,8 +260,6 @@ class String {
         return m_str;
     } 
 
-
-    // TODO support char
     template<typename S>
     std::vector<std::string> split(S delimiter){
         std::string s = getStdStr(delimiter);
@@ -363,111 +364,60 @@ class String {
     }
 
     std::string normPathUnix(){
-        for(int i = 1; i < m_str.length(); i++){
-            if(m_str.at(i) == m_str.at(i-1)){
-                m_str.erase(i);
-            }
-        } return m_str;
+        replace("\\", "/");
+        replace("//", "/");
+        return m_str;
     }
 
     std::string normPathWindows(){
-        for(int i = 1; i < m_str.length(); i++) {
-            if(m_str.at(i) == m_str.at(i-1)){
-                m_str.erase(i);
-            }
-        } return m_str;
+        replace("/", "\\");
+        replace("\\\\", "\\");
+        return m_str;
     }
 
-    // string formatting here:
+    template<typename S, typename ... Strs>
+    std::string format(S fstr, Strs... formatter) {
+        replaceFirst("{%}", fstr);
+        replaceFirst("{%}", formatter...);
+        return m_str;
+    }
 
-    //operators
-
+    // operator
     operator std::string() const{
         return m_str;
     }
 
-    String operator= (String &s) {
-        return s.m_str;
+    template<typename S>
+    void operator= (S s) {
+        m_str = getStdStr(s);
     }
 
-    void operator= (std::string str) {
-        m_str = str;
+    template<typename S>
+    bool operator== (S s) {
+        return (m_str.compare(getStdStr(s)) == 0);
     }
 
-    void operator= (const char* c) {
-        m_str = std::string(c);
+    template<typename S>
+    bool operator!= (S s) {
+        return (m_str.compare(getStdStr(s)) != 0);
     }
 
-    bool operator== (const String &s) {
-        return (m_str.compare(s.m_str) == 0);
-    }
-
-    bool operator== (const std::string &str) {
-        return (m_str.compare(str) == 0);
-    }
-
-    bool operator== (const char* c) {
-        for(int i = 0; i < m_str.length(); i++) {
-            if(m_str[i] != c[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    bool operator!= (const String& S) {
-        return (m_str.compare(S.m_str) != 0);
-    }
-
-    bool operator!= (const std::string str) {
-        return (m_str.compare(str) != 0);
-    }
-
-    bool operator!= (const char* c) {
-        for(int i = 0; i < m_str.length(); i++) {
-            if(m_str[i] != c[i]) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    String& operator+= (const String &S) {
-        this->m_str += S.m_str; 
+    template<typename S>
+    String& operator+= (S s) {
+        m_str += getStdStr(s);
         return *this;
     }
 
-    std::string operator+(const String &s) {
-        return m_str + s.m_str;
+    template<typename S>
+    std::string operator+(S s) {
+        return m_str + getStdStr(s);
     }
 
-    std::string operator+(const std::string &s) {
-        return m_str + s;
-    }
-
-    std::string operator+(const char* s) {
-        return m_str + std::string(s);
-    }
-
-    String& operator+= (const std::string str) {
-        this->m_str += str;
-        return *this;
-    }
-
-    String& operator+= (const char* c) {
-        std::string convert(c);
-        this->m_str += convert;
-        return *this;
-    }
-
-    String& operator+= (const char c) {
-        this->m_str += c;
-        return *this;
-    }
-
-    std::string operator*(String &s) {
-        for(int i = 0; i < s.size(); i++) {
-            m_str += s.m_str;
+    template<typename S>
+    std::string operator*(S s) {
+        std::string str = getStdStr(s);
+        for(int i = 0; i < str.length(); i++) {
+            m_str += str;
         } return m_str;
     }
 
