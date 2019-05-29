@@ -5,20 +5,20 @@ STL header-only and generic string class/lib which is orientated to Java and C# 
 ### Private Members
 | Name  | Type        |
 |-------|-------------|
-| m\_str | std::string |
+| ```m_str``` | ```std::string``` |
 
 ### Constructors
 | **Name**              	| **Description**                                  	|
 |---------------------	|------------------------------------------------------	|
-| String()            	| Initialize String with empty m\_str                  	|
-| String(const char*) 	| Loads const char* into m\_str                       	|
-| String(std::string) 	| Loads std::string into m\_str                        	|
-| String(char)        	| Loads char into m\_str                               	|
-| String(int)         	| Casts and loads int into m\_str                      	|
-| String(long)        	| Casts and loads long into m\_str                     	|
-| String(float)       	| Casts and loads float into m\_str                    	|
-| String(double)      	| Casts and loads double into m\_str                   	|
-| String(bool)        	| Initialize String with m\_str equal "true" or "false"	|
+| ```String()```            	| Initialize String with empty m\_str                  	|
+| ```String(const char*)``` 	| Loads const char* into m\_str                       	|
+| ```String(std::string)``` 	| Loads std::string into m\_str                        	|
+| ```String(char)```        	| Loads char into m\_str                               	|
+| ```String(int)```         	| Casts and loads int into m\_str                      	|
+| ```String(long)```        	| Casts and loads long into m\_str                     	|
+| ```String(float)```       	| Casts and loads float into m\_str                    	|
+| ```String(double)```      	| Casts and loads double into m\_str                   	|
+| ```String(bool)```        	| Initialize String with m\_str equal "true" or "false"	|
 
 ### Operator overloading
 
