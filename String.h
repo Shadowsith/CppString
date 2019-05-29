@@ -41,7 +41,6 @@ class String {
     String(int i) { m_str = std::to_string(i); }
     String(float f) { m_str = std::to_string(f); }
     String(double d) { m_str = std::to_string(d); }
-    String(short s) { m_str = std::to_string(s); }
     String(long l) { m_str = std::to_string(l); }
     String(bool b) { if(b) m_str = "true"; else m_str = "false"; }
 
