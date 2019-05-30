@@ -1,7 +1,8 @@
 all:
-	@g++ test.cpp ./lib/textformatpp.cpp -o test
+	@mkdir ./bin/
+	@g++ test.cpp ./lib/textformatpp.cpp -o ./bin/test
 run:
 	@make all
-	./test
+	./bin/test
 clean:
-	@rm ./test
+	@rm -r ./bin

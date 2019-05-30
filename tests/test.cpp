@@ -28,7 +28,7 @@ void t_toStdStr() {
 void t_toCStr() {
     const char* c = "hallo";
     String s("hallo");
-    message(std::strcmp(s.toCStr(), c) == 0, "toCStr");
+    message(s == c, "toCStr");
 }
 
 void t_casts() {

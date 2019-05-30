@@ -5,7 +5,6 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
-#include <cstring>
 #include <stdexcept>
 
 class String {
@@ -13,20 +12,16 @@ class String {
     private:
     std::string m_str;
 
-    template<typename S>
-    std::string getStdStr(S s) {
-        if(typeid(s) == typeid(std::string)) {
-            return s;
-        } else if(typeid(s) == typeid(const char*)) {
-            return std::string(s);
-        } else if(typeid(s) == typeid(String)) {
-            return static_cast<String>(s).m_str;
-        } else {
-            throw 
-                std::invalid_argument(
-                    "Argument is not from type String, std::string, char or const char*"
-                );
-        }
+    std::string getStdStr(std::string s) {
+        return s;
+    }
+
+    std::string getStdStr(const char* s) {
+        return std::string(s);
+    }
+
+    std::string getStdStr(String s) {
+        return s.toStdStr();
     }
 
     std::string getStdStr(char c) {
@@ -86,26 +81,25 @@ class String {
     }
 
     template<typename S>
-    bool compare(S &s) {
+    std::string addLeft(S s) {
+        return m_str = getStdStr(s) + m_str;
+    }
+
+    template<typename S>
+    std::string addRight(S s) {
+        return m_str += getStdStr(s);
+    }
+
+    template<typename S>
+    bool compare(S s) {
         if(m_str == getStdStr(s)) 
             return true;
         else 
             return false;
     }
 
-    bool compare(const char* s) {
-        if(std::strcmp(s, m_str.c_str()) == 0)
-            return true;
-        else
-            return false;
-    }
-
     template<typename S>
-    inline bool equals(S &s) {
-        return this->compare(s);
-    }
-
-    inline bool equals(const char* s) {
+    inline bool equals(S s) {
         return this->compare(s);
     }
 
@@ -114,12 +108,12 @@ class String {
     }
 
     inline int size() {
-        return this->length();
+        return length();
     }
 
     template<typename S>
-    std::string concat(const S &s) {
-        m_str += getStdStr(s);
+    std::string concat(const S str) {
+        m_str += getStdStr(str);
         return m_str;
     }
 
@@ -127,12 +121,12 @@ class String {
     void copyTo(std::string &s) { s = m_str; }
 
     template<typename S>
-    int count(S str) {
+    int count(const S str) {
         return this->find(getStdStr(str)).size();
     }
     
     template<typename S>
-    std::vector<int> find(S str) {
+    std::vector<int> find(const S str) {
         std::string s = getStdStr(str);
         std::vector<int> vec;
         std::size_t pos = m_str.find(s);
@@ -143,12 +137,12 @@ class String {
     }
 
     template<typename S>
-    inline std::vector<int> findAll(S str) {
+    inline std::vector<int> findAll(const S str) {
         return this->find(str);
     }
 
     template<typename S>
-    int findFirst(S str) {
+    int findFirst(const S str) {
         std::size_t pos = m_str.find(getStdStr(str));
         if(pos != std::string::npos){
             int i = static_cast<int>(pos);
@@ -176,7 +170,7 @@ class String {
     }
 
     template<typename S1, typename S2>
-    std::string replace(S1 oldstr, S2 newstr) {
+    std::string replace(const S1 oldstr, const S2 newstr) {
         std::string o = getStdStr(oldstr);
         std::string n = getStdStr(newstr);
         std::size_t pos = m_str.find(o);
@@ -188,7 +182,7 @@ class String {
     }
 
     template<typename S1, typename S2>
-    std::string replaceFirst(S1 oldstr, S2 newstr) {
+    std::string replaceFirst(const S1 oldstr, const S2 newstr) {
         std::string o = getStdStr(oldstr);
         std::string n = getStdStr(newstr);
         std::size_t pos = m_str.find(o);
@@ -302,7 +296,7 @@ class String {
         //trim left side
         std::string::size_type trimIt = 0;
         for(std::string::size_type i = 0; i < m_str.length(); i++) {
-            if(m_str[i] == ' ') {
+            if(m_str[i] == ' ' || m_str[i] == '\t') {
                 trimIt++;    
             } else break;
         }
@@ -311,7 +305,7 @@ class String {
         //trim right side
         trimIt = m_str.length();
         for(std::string::size_type i = m_str.length()-1; i > 0; i--) {
-            if(m_str[i] == ' '){
+            if(m_str[i] == ' ' || m_str[i] == '\t'){
                 trimIt--;
             } else break;
         }
@@ -323,7 +317,7 @@ class String {
     std::string trimLeft(){
         std::string::size_type trimIt = 0;
         for(std::string::size_type i = 0; i < m_str.length(); i++) {
-            if(m_str[i] == ' ') {
+            if(m_str[i] == ' ' || m_str[i] == '\t') {
                 trimIt++;    
             } else break;
         }
@@ -334,7 +328,8 @@ class String {
 
     std::string trimRight(){
         std::string::size_type trimIt = m_str.length();
-        while(m_str.rfind(" ") == m_str.length()-1){
+        while(m_str.rfind(" ") == m_str.length()-1
+              || m_str.rfind("\t") == m_str.length()-1) {
             if(m_str.length() == 1){
                 m_str.erase(0);
                 break;
@@ -388,7 +383,7 @@ class String {
     }
 
     template<typename S>
-    void operator= (S s) {
+    void operator= (S &s) {
         m_str = getStdStr(s);
     }
 
@@ -425,12 +420,12 @@ class String {
         return this->m_str[pos];
     }
 
-    friend std::ostream& operator<< (std::ostream &out, const String& s) {
+    friend std::ostream& operator<< (std::ostream &out, const String &s) {
         out << s.m_str;
         return out;
     }
 
-    friend std::istream& operator>> (std::istream &is, String& s) {
+    friend std::istream& operator>> (std::istream &is, String &s) {
         char* input = new char[256];
         is.getline(input,256);
         std::string convert(input);
