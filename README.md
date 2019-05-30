@@ -24,36 +24,36 @@ be used with the types char, const char\*, std::string or String.
 ### Constructors
 | Name              	        | Description                                        	|
 |---------------------      	|------------------------------------------------------	|
-| `String()`            	| Initialize String with empty m\_str                  	|
-| `String(const char*)` 	| Loads const char* into m\_str                       	|
-| `String(std::string)` 	| Loads std::string into m\_str                        	|
-| `String(char)`        	| Loads char into m\_str                               	|
-| `String(int)`         	| Casts and loads int into m\_str                      	|
-| `String(long)`        	| Casts and loads long into m\_str                     	|
-| `String(float)`       	| Casts and loads float into m\_str                    	|
-| `String(double)`      	| Casts and loads double into m\_str                   	|
-| `String(bool)`        	| Initialize String with m\_str equal "true" or "false"	|
+| `String()`            	| Initialize String with empty m\_str                  	    |
+| `String(const char*)` 	| Loads const char\* into m\_str                          	|
+| `String(std::string)` 	| Loads std::string into m\_str                           	|
+| `String(char)`        	| Loads char into m\_str                                 	|
+| `String(int)`         	| Casts and loads int into m\_str                       	|
+| `String(long)`        	| Casts and loads long into m\_str                      	|
+| `String(float)`       	| Casts and loads float into m\_str                     	|
+| `String(double)`      	| Casts and loads double into m\_str                    	|
+| `String(bool)`        	| Initialize String with m\_str equal "true" or "false"	    |
 
 ### Operator
-| Operator                 	| Return Value      | Descriptions                                                                                                          |
-|--------------------------	|-------------------|-----------------------------------------------------------------------------------------------------------------------|
-| `std::string() const` 	| `std::string`   	| Writes m_str into std::string                                                                                        	|
-| `=`                   	| `void`          	| Saves const char*, std::string or String into internal std::string                                                   	|
-| `==`                  	| `bool`          	| Check if internal std::string is equal with const char*, std::string or String                                       	|
-| `!=`                  	| `bool`          	| Check if internal std::string is not equal with const char*, std::string or String                                   	|
-| `+=`                  	| `String&`       	| Concatenates const char*, std::string or String with internal std::string                                            	|
-| `+`                   	| `std::string`   	| Concatenates String with const char*, std::string or String                                                          	|
-| `*`                   	| `std::string`   	| Concatenates a const char*, std::string or String n-times.  n is the length of the const char*, std::string or String   |
-| `[]`                  	| `char&`         	| Get char at the nth position                                                                                         	|
-| `<<`                  	| `std::ostream&` 	| Prints a String to stdout in std::cout                                                                               	|
-| `>>`                  	| `std::istream&` 	| Writes into String from stdin with help of std::cin                                                                  	|
+| Operator                 	| Return Value      | Descriptions                                                                                                              |
+|--------------------------	|-------------------|---------------------------------------------------------------------------------------------------------------------------|
+| `std::string() const` 	| `std::string`   	| Writes m_str into std::string                                                                                        	    |
+| `=`                   	| `void`          	| Saves const char\*, std::string or String into internal std::string                                                   	|
+| `==`                  	| `bool`          	| Check if internal std::string is equal with const char\*, std::string or String                                       	|
+| `!=`                  	| `bool`          	| Check if internal std::string is not equal with const char\*, std::string or String                                 	    |
+| `+=`                  	| `String&`       	| Concatenates const char\*, std::string or String with internal std::string                                           	    |
+| `+`                   	| `std::string`   	| Concatenates String with const char\*, std::string or String                                                          	|
+| `*`                   	| `std::string`   	| Concatenates a const char\*, std::string or String n-times.  n is the length of the const char\*, std::string or String   |
+| `[]`                  	| `char&`         	| Get char at the nth position                                                                                         	    |
+| `<<`                  	| `std::ostream&` 	| Prints a String to stdout in std::cout                                                                               	    |
+| `>>`                  	| `std::istream&` 	| Writes into String from stdin with help of std::cin                                                                  	    |
 
 ### Methods
 
 #### Private
-| Name                        	                    | Return Value 	| Description                                                                              |
-|---------------------------------------------------|---------------|------------------------------------------------------------------------------------------|
-| `getStdStr(char|const char*|std::string|String)` 	| `std::string`	| Method template which returns std::string from char, const char*, std::string and String |
+| Name                        	                    | Return Value 	| Description                                                                               |
+|---------------------------------------------------|---------------|-------------------------------------------------------------------------------------------|
+| `getStdStr(char|const char*|std::string|String)`	| `std::string`	| Method template which returns std::string from char, const char\*, std::string and String |
 
 #### Public
 | Name                               | Return Value               | Description                                                                                         |
@@ -62,10 +62,10 @@ be used with the types char, const char\*, std::string or String.
 | `addRight(typename S)`             | `std::string`              | Add substring on tail of String                                                                     |
 | `charAt(const int)`                | `char`                     | Get character at specific position                                                                  |
 | `compare(typename S)`              | `bool`                     | Compares String with String or std::string                                                          |
-| `concat(const typename S)`         | `std::string`              | Concats String with const char*, std::string or String                                               |
+| `concat(const typename S)`         | `std::string`              | Concats String with const char\*, std::string or String                                             |
 | `copyTo(String&)`                  | `void`                     | Saves reference of internal std::string to other internal std::string of String                     |
 | `copyTo(std::string&)`             | `void`                     | Saves reference of internal std::string to other std::string                                        |
-| `count(typename S)`                | `int`                      | Returns number of occurences of const char*, std::string or String argument in String                |
+| `count(typename S)`                | `int`                      | Returns number of occurences of const char\*, std::string or String argument in String              |
 | `equals(typename S)`               | `bool`                     | Alias to `compare(typename S&)`                                                                     |
 | `erase(typename S)`                | `std::string`              | Erases all occurences of substring                                                                  |
 | `eraseFirst(typename S)`           | `std::string`              | Erases first occurence of substring                                                                 |
@@ -99,7 +99,7 @@ be used with the types char, const char\*, std::string or String.
 | `swap(String &s)`                  | `void`                     | Swaps String and String                                                                             |
 | `toBool()`                         | `bool`                     | Casts String to bool (if `"0"`, `"false"`, `""` then "false" else "true")                           |
 | `toCharArr()`                      | `std::vector<char>`        | Returns container with characters                                                                   |
-| `toCStr()`                         | `const char*`               | Returns const char\* from String                                                                   |
+| `toCStr()`                         | `const char*`              | Returns const char\* from String                                                                    |
 | `toStdStr()`                       | `std::string`              | Returns internal std::string of String                                                              |
 | `toDouble()`                       | `double`                   | Returns double if String is numeric                                                                 |
 | `toFloat()`                        | `float`                    | Returns float if String is numeric                                                                  |
