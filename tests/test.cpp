@@ -1,5 +1,6 @@
 #include "../String.h"
 #include "./lib/textformatpp.h"
+using String = str::String;
 
 void message(bool condition, std::string msg) {
     if(condition) {

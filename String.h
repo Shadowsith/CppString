@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <cmath>
 
+namespace str {
 class String {
 
     private:
@@ -25,7 +26,7 @@ class String {
         return s.toStdStr();
     }
 
-    std::string getStdStr(char c) {
+    std::string getStdStr(char &c) {
         return std::string() += c;
     }
 
@@ -496,6 +497,6 @@ class String {
     friend bool operator==(const String &s1, const String &s2) {
         return s1.m_str == s2.m_str;
     }
- };
+};}
 
 #endif

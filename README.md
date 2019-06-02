@@ -15,6 +15,7 @@ STL header-only and generic string class/lib which is orientated to Java and C# 
 ## Usage
 ```cpp
 #include "String.h"
+using String = str::String; // for convincence
 
 int main() {
     String s = "Hello|World"; // can be used like std::string
