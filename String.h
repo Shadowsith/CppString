@@ -6,6 +6,7 @@
 #include <iostream>
 #include <algorithm>
 #include <stdexcept>
+#include <cmath>
 
 class String {
 
@@ -32,6 +33,7 @@ class String {
     String() { m_str = ""; }
     String(std::string str) { m_str = str; }
     String(const char* cstr) { m_str = std::string(cstr); }
+    String(const String &s) { m_str = s.m_str; }
     String(char c) { m_str = std::string() += c; }
     String(int i) { m_str = std::to_string(i); }
     String(float f) { m_str = std::to_string(f); }
@@ -80,14 +82,20 @@ class String {
         }
     }
 
-    template<typename S>
-    std::string addLeft(S s) {
-        return m_str = getStdStr(s) + m_str;
+    String substr(const int pos, const int len) {
+        return String(m_str.substr(pos, len));
     }
 
     template<typename S>
-    std::string addRight(S s) {
-        return m_str += getStdStr(s);
+    String& addLeft(S s) {
+        m_str = getStdStr(s) + m_str;
+        return *this;
+    }
+
+    template<typename S>
+    String& addRight(S s) {
+        m_str += getStdStr(s);
+        return *this;
     }
 
     template<typename S>
@@ -112,9 +120,9 @@ class String {
     }
 
     template<typename S>
-    std::string concat(const S str) {
+    String& concat(const S str) {
         m_str += getStdStr(str);
-        return m_str;
+        return *this;
     }
 
     void copyTo(String &s) { s.m_str = m_str; }
@@ -133,7 +141,8 @@ class String {
         while(pos != std::string::npos) {
             vec.push_back(pos);
             pos = m_str.find(s,pos+1);
-        } return vec;
+        }
+        return vec;
     }
 
     template<typename S>
@@ -147,7 +156,8 @@ class String {
         if(pos != std::string::npos){
             int i = static_cast<int>(pos);
             return i;
-        } return 0;
+        }
+        return 0;
     }
 
     template<typename S>
@@ -170,7 +180,7 @@ class String {
     }
 
     template<typename S1, typename S2>
-    std::string replace(const S1 oldstr, const S2 newstr) {
+    String& replace(const S1 oldstr, const S2 newstr) {
         std::string o = getStdStr(oldstr);
         std::string n = getStdStr(newstr);
         std::size_t pos = m_str.find(o);
@@ -178,95 +188,99 @@ class String {
             m_str.replace(pos, o.length(), n);
             pos = m_str.find(o,pos+1);
         }
-        return m_str;
+        return *this;
     }
 
     template<typename S1, typename S2>
-    std::string replaceFirst(const S1 oldstr, const S2 newstr) {
+    String& replaceFirst(const S1 oldstr, const S2 newstr) {
         std::string o = getStdStr(oldstr);
         std::string n = getStdStr(newstr);
         std::size_t pos = m_str.find(o);
         if(pos != std::string::npos) {
             m_str.replace(pos, o.length(), n);
-        } return m_str;
+        }
+        return *this;
     }
 
     template<typename S1, typename S2>
-    std::string replaceLast(S1 oldstr, S2 newstr) {
+    String& replaceLast(S1 oldstr, S2 newstr) {
         std::string o = getStdStr(oldstr);
         std::string n = getStdStr(newstr);
         std::size_t pos = m_str.rfind(o);
         if(pos != std::string::npos) {
             m_str.replace(pos, o.length(), n);
-        } return m_str;
+        }
+        return *this;
     }
 
     template<typename S>
-    std::string replaceHead(const int headsize, S newstr){
+    String& replaceHead(const int headsize, S newstr){
         m_str.erase(0,headsize);
         m_str = getStdStr(newstr) + m_str;
-        return m_str;
+        return *this;
     }
 
     template<typename S>
-    std::string replaceTail(const int tailsize, S newstr){
+    String& replaceTail(const int tailsize, S newstr){
         m_str.erase(m_str.end()-tailsize, m_str.end());
         m_str += getStdStr(newstr);
-        return m_str;
+        return *this;
     }
 
     template<typename S>
-    std::string erase(S erasestr){
+    String& erase(S erasestr){
         std::string s = getStdStr(erasestr);
         std::string::size_type n = s.length();
         for (std::string::size_type i = m_str.find(s); i != std::string::npos; 
             i = m_str.find(s)) {
             m_str.erase(i, n);    
         }
-        return m_str;
+        return *this;
     } 
 
     template<typename S>
-    std::string eraseFirst(S erasestr){
+    String& eraseFirst(S erasestr){
         std::string s = getStdStr(erasestr);
         std::size_t pos = m_str.find(s);
         if(pos != std::string::npos){
             m_str.erase(pos, s.length());
-        } return m_str;
+        }
+        return *this;
     } 
 
     template<typename S>
-    std::string eraseLast(S erasestr){
+    String& eraseLast(S erasestr){
         std::string s = getStdStr(erasestr);
         std::size_t pos = m_str.rfind(s);
         if(pos != std::string::npos){
             m_str.erase(pos, s.length());
-        } return m_str;
+        }
+        return *this;
     } 
 
-    std::string eraseHead(const int headsize){
+    String& eraseHead(const int headsize){
         m_str.erase(0,headsize);
-        return m_str;
+        return *this;
     }
 
-    std::string eraseTail(const int tailsize){
+    String& eraseTail(const int tailsize){
         m_str.erase(m_str.end()-tailsize, m_str.end());
-        return m_str;
+        return *this;
     } 
 
     template<typename S>
-    std::vector<std::string> split(S delimiter){
+    std::vector<String> split(S delimiter){
         std::string s = getStdStr(delimiter);
-        std::vector<std::string> parts;
+        std::vector<String> parts;
         std::string str = m_str;
         std::size_t pos = 0;
         std::string token;
         while((pos = str.find(s)) != std::string::npos){
             token = str.substr(0,pos);
-            parts.push_back(token);
+            parts.push_back(String(token));
             str.erase(0, pos + s.length());
         }
-        parts.push_back(str);
+        parts.push_back(String(str));
         return parts;
     }
 
@@ -282,18 +296,23 @@ class String {
         str2 = str3;
     }
 
-    std::string toUpper(){
+    String& toUpper(){
         std::transform(m_str.begin(), m_str.end(), m_str.begin(), ::toupper);  
-        return m_str; 
+        return *this;
     }
 
-    std::string toLower(){
+    String& toLower(){
         std::transform(m_str.begin(), m_str.end(), m_str.begin(), ::tolower);  
-        return m_str;
+        return *this;
     }
 
-    std::string trim() {
-        //trim left side
+    String& trim() {
+        trimLeft();
+        trimRight();
+        return *this;
+    }
+
+    String& trimLeft(){
         std::string::size_type trimIt = 0;
         for(std::string::size_type i = 0; i < m_str.length(); i++) {
             if(m_str[i] == ' ' || m_str[i] == '\t') {
@@ -301,29 +320,7 @@ class String {
             } else break;
         }
         m_str.erase(0,trimIt);
-
-        //trim right side
-        trimIt = m_str.length();
-        for(std::string::size_type i = m_str.length()-1; i > 0; i--) {
-            if(m_str[i] == ' ' || m_str[i] == '\t'){
-                trimIt--;
-            } else break;
-        }
-        m_str.erase(trimIt, m_str.length()-1);
-
-        return m_str;
-    }
-
-    std::string trimLeft(){
-        std::string::size_type trimIt = 0;
-        for(std::string::size_type i = 0; i < m_str.length(); i++) {
-            if(m_str[i] == ' ' || m_str[i] == '\t') {
-                trimIt++;    
-            } else break;
-        }
-        m_str.erase(0,trimIt);
-
-        return m_str;
+        return *this;
     }
 
     std::string trimRight(){
@@ -335,46 +332,65 @@ class String {
                 break;
             }
             m_str.erase(m_str.length()-1);
-        } return m_str;
+        }
+        return *this;
     }
 
-    std::string fillLeft(const int length, const char fill){
+    String& fillLeft(const int length, const char fill){
         for(int i = 0; i < length; i++){
             m_str.insert(m_str.begin(), fill);
-        } return m_str;
+        }
+        return *this;
     }
 
-    inline std::string padLeft(const int length, const char fill){
+    inline String& padLeft(const int length, const char fill){
         return this->fillLeft(length, fill);    
     }
 
-    std::string fillRight(const int length, const char fill){
+    String& fillRight(const int length, const char fill){
         for (int i = 0; i < length; i++) {
             m_str += fill;
-        } return m_str;
+        }
+        return *this;
     }
 
-    inline std::string padRight(const int length, const char fill){
+    inline String& padRight(const int length, const char fill){
         return this->fillRight(length, fill);
     }
 
-    std::string normPathUnix(){
+    String& normPathUnix(){
         replace("\\", "/");
         replace("//", "/");
-        return m_str;
+        return *this;
     }
 
-    std::string normPathWindows(){
+    String& normPathWindows(){
         replace("/", "\\");
         replace("\\\\", "\\");
-        return m_str;
+        return *this;
     }
 
     template<typename S, typename ... Strs>
-    std::string format(S fstr, Strs... formatter) {
+    String& format(S fstr, Strs... formatter) {
         replaceFirst("{%}", fstr);
         replaceFirst("{%}", formatter...);
-        return m_str;
+        return *this;
+    }
+
+    void print() {
+        std::cout << m_str << std::endl;
+    }
+
+    template<typename S>
+    void print(S s, S separator = "") {
+        std::cout << getStdStr(s) << separator;
+    }
+
+    template<typename S, typename ... Strings>
+    void print(S separator, S s, Strings... strs) {
+        print(s, separator);
+        print(strs..., separator);
+        std::cout << std::endl;
     }
 
     // operator
@@ -398,22 +414,66 @@ class String {
     }
 
     template<typename S>
+    bool operator< (S s) {
+        return (m_str.length() < getStdStr(s).length());
+    }
+
+    template<typename S>
+    bool operator<= (S s) {
+        return (m_str.length() <= getStdStr(s).length());
+    }
+
+    template<typename S>
+    bool operator> (S s) {
+        return (m_str.length() > getStdStr(s).length());
+    }
+
+    template<typename S>
+    bool operator>= (S s) {
+        return (m_str.length() >= getStdStr(s).length());
+    }
+
+    template<typename S>
     String& operator+= (S s) {
         m_str += getStdStr(s);
         return *this;
     }
 
     template<typename S>
-    std::string operator+(S s) {
-        return m_str + getStdStr(s);
+    String operator+(S s) {
+        return String(m_str + getStdStr(s));
     }
 
-    template<typename S>
-    std::string operator*(S s) {
-        std::string str = getStdStr(s);
-        for(int i = 0; i < str.length(); i++) {
-            m_str += str;
-        } return m_str;
+    String operator*(int mul) {
+        std::string str;
+        for(int i = 0; i < mul; i++) {
+            str += m_str;
+        }
+        return String(str);
+    }
+
+    String operator*=(int mul) {
+        for(int i = 0; i < mul; i++) {
+            m_str += m_str;
+        }
+        return *this;
+    }
+
+    std::vector<String> operator/(int div) {
+        if(this->length() < div) {
+            throw std::out_of_range("String.length() has to be greater or equal divisor");
+        }
+        std::vector<String> vec;
+        int start, end, len, j = 0;
+        int length = this->length();
+        float f = static_cast<float>(length)/static_cast<float>(div);
+        int idiv = round(f);
+        for(int i = 0; i < div; i++) {
+            vec.push_back(
+                this->substr(i*idiv, idiv)
+            );
+        }
+        return vec;
     }
 
     char& operator[] (int pos) {
@@ -432,6 +492,10 @@ class String {
         s = convert;
         return is;
     }
-};
+
+    friend bool operator==(const String &s1, const String &s2) {
+        return s1.m_str == s2.m_str;
+    }
+ };
 
 #endif

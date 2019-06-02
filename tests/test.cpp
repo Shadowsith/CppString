@@ -304,8 +304,8 @@ void t_eraseTail() {
 }
 
 void t_split() {
-    static const std::string arr[] = {"you", "are", "the", "greatest"}; 
-    std::vector<std::string> vec(arr, arr + sizeof(arr) / sizeof(arr[0]));
+    static const String arr[] = {"you", "are", "the", "greatest"}; 
+    std::vector<String> vec(arr, arr + sizeof(arr) / sizeof(arr[0]));
 
     String s = "you are the greatest";
 
@@ -314,12 +314,13 @@ void t_split() {
     const char* dcst = " ";
     char dc = ' '; 
 
-    std::vector<std::string> vec1 = s.split(ds);
-    std::vector<std::string> vec2 = s.split(dS);
-    std::vector<std::string> vec3 = s.split(dcst);
-    std::vector<std::string> vec4 = s.split(dc);
-    std::vector<std::string> vec5 = s.split(" ");
-    std::vector<std::string> vec6 = s.split(' ');
+    std::vector<String> vec1 = s.split(ds);
+    std::vector<String> vec2 = s.split(dS);
+    std::vector<String> vec3 = s.split(dcst);
+    std::vector<String> vec4 = s.split(dc);
+    std::vector<String> vec5 = s.split(" ");
+    std::vector<String> vec6 = s.split(' ');
+    bool t0 = vec1 == vec2;
 
     bool t1 = (vec == vec1) && (vec == vec2) && (vec == vec3) && (vec == vec4);
     bool t2 = (vec == vec5) && (vec == vec6);
@@ -399,6 +400,32 @@ void t_op_unequal() {
     message(s != "hallo" || s != std::string("hallo"), "Operator!=");
 }
 
+void t_op_smallerThan() {
+    String s0("hello");
+    String s1("helloWorld");
+    message(s0 < s1, "Operator<");
+}
+
+void t_op_smallerEq() {
+    String s0("hello");
+    String s1("hello");
+    String s2("helloWorld");
+    message(s0 < s2 && s0 <= s1, "Operator<=");
+}
+
+void t_op_greaterThan() {
+    String s0("hello");
+    String s1("helloWorld");
+    message(s1 > s0, "Operator>");
+}
+
+void t_op_greaterEq() {
+    String s0("hello");
+    String s1("hello");
+    String s2("helloWorld");
+    message(s2 > s1 && s0 >= s1, "Operator>=");
+}
+
 void t_op_outstream() {
     std::cout << text::green(String("ACCEPT: Operator<<").toStdStr()) << std::endl;
 }
@@ -433,13 +460,16 @@ int main(void)
     t_op_declaration();
     t_op_equal();
     t_op_unequal();
+    t_op_smallerThan();
+    t_op_smallerEq();
+    t_op_greaterThan();
+    t_op_greaterEq();
     t_op_outstream();
     t_op_brackets();
     t_op_plus();
     t_op_plusEqual();
 
-    std::cout << std::endl;
-    std::cout << "Method Tests:" << std::endl;
+    std::cout << std::endl << "Method Tests:" << std::endl;
     t_construct();
     t_toStdStr();
     t_toCStr();

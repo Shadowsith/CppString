@@ -1,5 +1,5 @@
 all:
-	@mkdir ./bin/
+	@mkdir -p ./bin/
 	@g++ test.cpp ./lib/textformatpp.cpp -o ./bin/test
 run:
 	@make all
