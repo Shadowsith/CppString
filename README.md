@@ -79,9 +79,12 @@ be used with the types `char`, `const char*`, `std::string` or `String`.
 ### Methods
 
 #### Private
-| Name                        	                    | Return Value 	| Description                                                                                      |
-|---------------------------------------------------|---------------|--------------------------------------------------------------------------------------------------|
-| `getStdStr(char|const char*|std::string|String)`	| `std::string`	| Method template which returns `std::string` from char, `const char*`, `std::string` and `String` |
+| Name                     | Return Value  |	 Description                      |
+|------------------------- |---------------|--------------------------------------|
+| `getStdStr(char)`	       | `std::string` | Returns `std::string` from argument  |
+| `getStdStr(const char*)` | `std::string` | Returns `std::string` from argument  |
+| `getStdStr(std::string)` | `std::string` | Returns `std::string` from argument  |
+| `getStdStr(String)`	   | `std::string` | Returns `std::string` from argument  |
 
 #### Public
 | Name                               | Return Value           | Description                                                                                         |
