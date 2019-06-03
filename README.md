@@ -8,6 +8,7 @@ STL header-only and generic string class/lib which is orientated to Java and C# 
 * fully compatiblity to `std::string` 
 * generic methods to avoid many method overloadings
 * inheritable
+* iterateable
 
 ## Errors/Bugs
 * nothing known
@@ -23,7 +24,7 @@ int main() {
     // vec includes vec[0] = "Hello", vec[1] = "World";
     std::vector<std::string> vec = s.split("|");
     s.toUpper(); // "HELLO|WORLD"
-    s.addLeft("  !").addRight("?  ");
+    s.addHead("  !").addTail("?  ");
     s.trim(); // "!HELLO|WORLD?"
     s.count("l"); // --> 3;
     std::vector<int> pos = s.find("l"); // 3, 4, 10
@@ -41,7 +42,7 @@ int main() {
 
 ## Reference
 ### Notice
-Many operators and methods of String are templates. Each argument of `typename S` can
+Many operators and methods of String are templates. Each argument of `const T<>` can
 be used with the types `char`, `const char*`, `std::string` or `String`.
 ### Private Members
 | Name    | Type            |
@@ -90,46 +91,47 @@ be used with the types `char`, `const char*`, `std::string` or `String`.
 #### Public
 | Name                               | Return Value           | Description                                                                                         |
 |------------------------------------|------------------------|-----------------------------------------------------------------------------------------------------|
-| `addLeft(typename S)`              | `String&`              | Add substring on head of `String`                                                                   |
-| `addRight(typename S)`             | `String&`              | Add substring on tail of `String`                                                                   |
+| `addHead(const T<>)`               | `String&`              | Add substring on head of `String`                                                                   |
+| `addTail(const T<>)`               | `String&`              | Add substring on tail of `String`                                                                   |
 | `charAt(const int)`                | `char`                 | Get character at specific position                                                                  |
-| `compare(typename S)`              | `bool`                 | Compares `String` with `String` or `std::string`                                                    |
-| `concat(const typename S)`         | `String&`              | Concats `String` with `const char*`, `std::string` or `String`                                      |
+| `compare(const T<>)`               | `bool`                 | Compares `String` with `String` or `std::string`                                                    |
+| `concat(const T<>)`                | `String&`              | Concats `String` with `const char*`, `std::string` or `String`                                      |
+| `contains(const T<>)`              | `bool`                 | Checks if `String` contains a specific substring                                                    |
 | `copyTo(String&)`                  | `void`                 | Saves reference of internal `std::string` to other internal `std::string` of `String`               |
 | `copyTo(std::string&)`             | `void`                 | Saves reference of internal `std::string` to other `std::string`                                    |
-| `count(typename S)`                | `int`                  | Returns number of occurences of `const char*`, `std::string` or `String` argument in `String`       |
-| `equals(typename S)`               | `bool`                 | Alias to `compare(typename S&)`                                                                     |
-| `erase(typename S)`                | `String&`              | Erases all occurences of substring                                                                  |
-| `eraseFirst(typename S)`           | `String&`              | Erases first occurence of substring                                                                 |
+| `count(const T<>)`                 | `int`                  | Returns number of occurences of `const char*`, `std::string` or `String` argument in `String`       |
+| `endsWith(const T<>)`              | `bool`                 | Checks if a `String` ends with a specific substring                                                 |
+| `equals(const T<>)`                | `bool`                 | Alias to `compare(const T<>&)`                                                                      |
+| `erase(const T<>)`                 | `String&`              | Erases all occurences of substring                                                                  |
+| `eraseFirst(const T<>)`            | `String&`              | Erases first occurence of substring                                                                 |
 | `eraseHead(int)`                   | `String&`              | Erases head of `String`                                                                             |
-| `eraseLast(typename S)`            | `String&`              | Erases last occurence of substring                                                                  |
+| `eraseLast(const T<>)`             | `String&`              | Erases last occurence of substring                                                                  |
 | `eraseTail(int)`                   | `String&`              | Erases tail of `String`                                                                             |
-| `fillLeft(const int, const char)`  | `String&`              | Fill head of `String` with number of characters                                                     |
-| `fillRight(const int, const char)` | `String&`              | Fill tail of `String` with number of characters                                                     |
-| `find(typename S)`                 | `std::vector<int>`     | Search all occurences of substring and saves position of them in vector container                   |
-| `findAll(typename S)`              | `std::vector<int>`     | Alias of `find(typename S&)`                                                                        |
-| `findFirst(typename S)`            | `int`                  | Returns position of first occurence of substring                                                    |
-| `findLast(typename S)`             | `int`                  | Returns position of last occurence of substring                                                     |
-| `format(typename S1, typename S2)` | `String&`              | Replaces `{%}` with argument                                                                        |
-| `indexOf(typename S)`              | `int`                  | Alias of`findFirst(typename S&)`                                                                    |
+| `fillHead(const int, const char)`  | `String&`              | Fill head of `String` with number of characters                                                     |
+| `fillTail(const int, const char)`  | `String&`              | Fill tail of `String` with number of characters                                                     |
+| `find(const T<>)`                  | `std::vector<int>`     | Search all occurences of substring and saves position of them in vector container                   |
+| `findAll(const T<>)`               | `std::vector<int>`     | Alias of `find(const T<>&)`                                                                         |
+| `findFirst(const T<>)`             | `int`                  | Returns position of first occurence of substring                                                    |
+| `findLast(const T<>)`              | `int`                  | Returns position of last occurence of substring                                                     |
+| `format(const T<>1, const T<>2)`   | `String&`              | Replaces `{%}` with argument                                                                        |
+| `indexOf(const T<>)`               | `int`                  | Alias of`findFirst(const T<>&)`                                                                     |
 | `isEmpty()`                        | `bool`                 | Checks if `String` is empty string `""`                                                             |
 | `isEmptyOrWhiteSpace()`            | `bool`                 | Checks if `String` is empty string or string with WhiteSpaces only                                  |
-| `lastIndexOf(typename S)`          | `int`                  | Alias of `findLast(typename S&)`                                                                    |
+| `lastIndexOf(const T<>)`           | `int`                  | Alias of `findLast(const T<>&)`                                                                     |
 | `length()`                         | `int`                  | Get length of `String`                                                                              |
-| `normPathUnix()`                   | `String&`              | Normalizes filepath for Unix based systems                                                          |
-| `normPathWindows()`                | `String&`              | Normalizes filepath for Windows based systems                                                       |
-| `padLeft(const int, const char)`   | `String&`              | Alias for `fillLeft(const int, const char)`                                                         |
-| `padRight(const int, const char)`  | `String&`              | Alias for `fillRight(const int, const char)`                                                        |
+| `padLeft(const int, const char)`   | `String&`              | Alias for `fillHead(const int, const char)`                                                         |
+| `padRight(const int, const char)`  | `String&`              | Alias for `fillTail(const int, const char)`                                                         |
 | `print()`                          | `void`                 | Prints `String` to stdout                                                                           |
-| `print(typename S, S = "")`        | `void`                 | Prints `const char*`, `std::string` or `String` to stdout                                           |
-| `print(S = "", S, Strings)`        | `void`                 | Prints n `const char*`, `std::string` or `String` to stdout with specific separator                 |
-| `replace(typename S)`              | `String&`              | Replaces all occurences of substring                                                                |
-| `replaceFirst(typename S)`         | `String&`              | Replaces first occurence of substring                                                               |
-| `replaceHead(int, typename S)`     | `String&`              | Replaces head of `String` with new substring                                                        |
-| `replaceLast(typename S)`          | `String&`              | Replaces last occurence of substring                                                                |
-| `replaceTail(int, typename S)`     | `String&`              | Replaces tail of `String` with new substring                                                        |
+| `print(const T<>, const T<> = "")` | `void`                 | Prints `const char*`, `std::string` or `String` to stdout                                           |
+| `print(const T<> = "", const T<>, const T<>...)` | `void`   | Prints n `const char*`, `std::string` or `String` to stdout with specific separator                 |
+| `replace(const T<>)`               | `String&`              | Replaces all occurences of substring                                                                |
+| `replaceFirst(const T<>)`          | `String&`              | Replaces first occurence of substring                                                               |
+| `replaceHead(int, const T<>)`      | `String&`              | Replaces head of `String` with new substring                                                        |
+| `replaceLast(const T<>)`           | `String&`              | Replaces last occurence of substring                                                                |
+| `replaceTail(int, const T<>)`      | `String&`              | Replaces tail of `String` with new substring                                                        |
 | `size()`                           | `int`                  | Alias of `length()`                                                                                 |
-| `split(typename S)`                | `std::vector<String>`  | Splits string with help of delimiter (char or string) into substrings and saves them in a container |
+| `split(const T<>)`                 | `std::vector<String>`  | Splits string with help of delimiter (char or string) into substrings and saves them in a container |
+| `startsWith(const T<>)`            | `bool`                 | Checks if a `String` starts with a specific substring                                               |
 | `swap(std::string&)`               | `void`                 | Swaps `String` and `std::string`                                                                    |
 | `swap(String &s)`                  | `void`                 | Swaps `String` and `String`                                                                         |
 | `toBool()`                         | `bool`                 | Casts `String` to bool (if `"0"`, `"false"`, `""` then `"false"` else `"true"`)                     |
@@ -143,5 +145,5 @@ be used with the types `char`, `const char*`, `std::string` or `String`.
 | `toLower()`                        | `String&`              | Formats `String` to lower case                                                                      |
 | `toUpper()`                        | `String&`              | Formats `String` to upper case                                                                      |
 | `trim()`                           | `String&`              | Trims WhiteSpaces on                                                                                |
-| `trimLeft()`                       | `String&`              | Trims WhiteSpaces at head of `String`                                                               |
-| `trimRight()`                      | `String&`              | Trims WhiteSpaces at tail of `String`                                                               |
+| `trimHead()`                       | `String&`              | Trims WhiteSpaces at head of `String`                                                               |
+| `trimTail()`                       | `String&`              | Trims WhiteSpaces at tail of `String`                                                               |

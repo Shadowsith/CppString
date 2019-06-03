@@ -13,20 +13,24 @@ class String {
 
     private:
     std::string m_str;
+    typedef std::string::iterator iterator;
+    typedef std::string::reverse_iterator reverse_iterator;
+    typedef std::string::const_iterator const_iterator;
+    typedef std::string::const_reverse_iterator const_reverse_iterator;
 
-    std::string getStdStr(std::string s) {
+    const std::string getStdStr(std::string s) {
         return s;
     }
 
-    std::string getStdStr(const char* s) {
+    const std::string getStdStr(const char* s) {
         return std::string(s);
     }
 
-    std::string getStdStr(String s) {
+    const std::string getStdStr(String s) {
         return s.toStdStr();
     }
 
-    std::string getStdStr(char &c) {
+    const std::string getStdStr(char &c) {
         return std::string() += c;
     }
 
@@ -35,12 +39,13 @@ class String {
     String(std::string str) { m_str = str; }
     String(const char* cstr) { m_str = std::string(cstr); }
     String(const String &s) { m_str = s.m_str; }
-    String(char c) { m_str = std::string() += c; }
-    String(int i) { m_str = std::to_string(i); }
-    String(float f) { m_str = std::to_string(f); }
-    String(double d) { m_str = std::to_string(d); }
-    String(long l) { m_str = std::to_string(l); }
-    String(bool b) { if(b) m_str = "true"; else m_str = "false"; }
+    String(const char c) { m_str = std::string() += c; }
+    String(const int i) { m_str = std::to_string(i); }
+    String(const float f) { m_str = std::to_string(f); }
+    String(const double d) { m_str = std::to_string(d); }
+    String(const long l) { m_str = std::to_string(l); }
+    String(const bool b) { if(b) m_str = "true"; else m_str = "false"; }
+    ~String() {}
 
     // casts 
     std::string toStdStr() { return m_str; }
@@ -88,19 +93,19 @@ class String {
     }
 
     template<typename S>
-    String& addLeft(S s) {
+    String& addHead(const S s) {
         m_str = getStdStr(s) + m_str;
         return *this;
     }
 
     template<typename S>
-    String& addRight(S s) {
+    String& addTail(const S s) {
         m_str += getStdStr(s);
         return *this;
     }
 
     template<typename S>
-    bool compare(S s) {
+    bool compare(const S s) {
         if(m_str == getStdStr(s)) 
             return true;
         else 
@@ -108,7 +113,7 @@ class String {
     }
 
     template<typename S>
-    inline bool equals(S s) {
+    inline bool equals(const S s) {
         return this->compare(s);
     }
 
@@ -117,7 +122,48 @@ class String {
     }
 
     inline int size() {
-        return length();
+        return this->length();
+    }
+
+    void clear() {
+        m_str.clear();
+    }
+
+    char front() {
+        return m_str.front();
+    }
+
+    inline char first() {
+        return this->front();
+    }
+
+    char back() {
+        return m_str.back();
+    }
+
+    inline char last() {
+        return this->back();
+    }
+
+    void shrinkToFit() {
+        m_str.shrink_to_fit();
+    }
+
+    size_t maxSize() const noexcept {
+        return m_str.max_size();
+    }
+
+    size_t capacity() const noexcept {
+        return m_str.capacity();
+    }
+
+    void resize(size_t n) {
+        m_str.resize(n);
+    }
+
+    template<typename S>
+    bool contains(const S str) {
+        return this->count(str) > 0;
     }
 
     template<typename S>
@@ -126,12 +172,23 @@ class String {
         return *this;
     }
 
+    template<typename S>
+    inline String& join(const S str) {
+        return this->concat(str);
+    }
+
     void copyTo(String &s) { s.m_str = m_str; }
     void copyTo(std::string &s) { s = m_str; }
 
     template<typename S>
     int count(const S str) {
         return this->find(getStdStr(str)).size();
+    }
+
+    template<typename S>
+    String& insert(const int start, const S str) {
+        m_str.insert(start, getStdStr(str));
+        return *this;
     }
     
     template<typename S>
@@ -162,12 +219,12 @@ class String {
     }
 
     template<typename S>
-    inline int indexOf(S str) {
+    inline int indexOf(const S str) {
         return this->findFirst(str);
     }
 
     template<typename S>
-    int findLast(S str) {
+    int findLast(const S str) {
         std::size_t pos = m_str.rfind(getStdStr(str));
         if(pos != std::string::npos){
             int i = static_cast<int>(pos);
@@ -176,7 +233,7 @@ class String {
     }
 
     template<typename S>
-    inline int lastIndexOf(S str) {
+    inline int lastIndexOf(const S str) {
         return this->findLast(str);
     }
 
@@ -204,7 +261,7 @@ class String {
     }
 
     template<typename S1, typename S2>
-    String& replaceLast(S1 oldstr, S2 newstr) {
+    String& replaceLast(const S1 oldstr, const S2 newstr) {
         std::string o = getStdStr(oldstr);
         std::string n = getStdStr(newstr);
         std::size_t pos = m_str.rfind(o);
@@ -215,22 +272,22 @@ class String {
     }
 
     template<typename S>
-    String& replaceHead(const int headsize, S newstr){
+    String& replaceHead(const int headsize, const S newstr){
         m_str.erase(0,headsize);
         m_str = getStdStr(newstr) + m_str;
         return *this;
     }
 
     template<typename S>
-    String& replaceTail(const int tailsize, S newstr){
+    String& replaceTail(const int tailsize, const S newstr){
         m_str.erase(m_str.end()-tailsize, m_str.end());
         m_str += getStdStr(newstr);
         return *this;
     }
 
     template<typename S>
-    String& erase(S erasestr){
-        std::string s = getStdStr(erasestr);
+    String& erase(const S erasestr){
+        const std::string s = getStdStr(erasestr);
         std::string::size_type n = s.length();
         for (std::string::size_type i = m_str.find(s); i != std::string::npos; 
             i = m_str.find(s)) {
@@ -240,7 +297,7 @@ class String {
     } 
 
     template<typename S>
-    String& eraseFirst(S erasestr){
+    String& eraseFirst(const S erasestr){
         std::string s = getStdStr(erasestr);
         std::size_t pos = m_str.find(s);
         if(pos != std::string::npos){
@@ -250,8 +307,8 @@ class String {
     } 
 
     template<typename S>
-    String& eraseLast(S erasestr){
-        std::string s = getStdStr(erasestr);
+    String& eraseLast(const S erasestr){
+        const std::string s = getStdStr(erasestr);
         std::size_t pos = m_str.rfind(s);
         if(pos != std::string::npos){
             m_str.erase(pos, s.length());
@@ -270,8 +327,8 @@ class String {
     } 
 
     template<typename S>
-    std::vector<String> split(S delimiter){
-        std::string s = getStdStr(delimiter);
+    std::vector<String> split(const S delimiter){
+        const std::string s = getStdStr(delimiter);
         std::vector<String> parts;
         std::string str = m_str;
         std::size_t pos = 0;
@@ -308,12 +365,12 @@ class String {
     }
 
     String& trim() {
-        trimLeft();
-        trimRight();
+        trimHead();
+        trimTail();
         return *this;
     }
 
-    String& trimLeft(){
+    String& trimHead(){
         std::string::size_type trimIt = 0;
         for(std::string::size_type i = 0; i < m_str.length(); i++) {
             if(m_str[i] == ' ' || m_str[i] == '\t') {
@@ -324,7 +381,7 @@ class String {
         return *this;
     }
 
-    std::string trimRight(){
+    std::string trimTail(){
         std::string::size_type trimIt = m_str.length();
         while(m_str.rfind(" ") == m_str.length()-1
               || m_str.rfind("\t") == m_str.length()-1) {
@@ -337,42 +394,44 @@ class String {
         return *this;
     }
 
-    String& fillLeft(const int length, const char fill){
+    String& fillHead(const int length, const char fill) {
         for(int i = 0; i < length; i++){
             m_str.insert(m_str.begin(), fill);
         }
         return *this;
     }
 
-    inline String& padLeft(const int length, const char fill){
-        return this->fillLeft(length, fill);    
+    inline String& padLeft(const int length, const char fill) {
+        return this->fillHead(length, fill);    
     }
 
-    String& fillRight(const int length, const char fill){
+    String& fillTail(const int length, const char fill){
         for (int i = 0; i < length; i++) {
             m_str += fill;
         }
         return *this;
     }
 
-    inline String& padRight(const int length, const char fill){
-        return this->fillRight(length, fill);
+    inline String& padRight(const int length, const char fill) {
+        return this->fillTail(length, fill);
     }
 
-    String& normPathUnix(){
-        replace("\\", "/");
-        replace("//", "/");
-        return *this;
+    template<typename S>
+    bool endsWith(const S str) {
+        const std::string s = getStdStr(str);
+        if(s.length() > m_str.length()) return false;
+        return s == m_str.substr(m_str.length()-s.length(), s.length());
     }
 
-    String& normPathWindows(){
-        replace("/", "\\");
-        replace("\\\\", "\\");
-        return *this;
+    template<typename S>
+    bool startsWith(const S str) {
+        const std::string s = getStdStr(str);
+        if(s.length() > m_str.length()) return false;
+        return s == m_str.substr(0, s.length());
     }
 
     template<typename S, typename ... Strs>
-    String& format(S fstr, Strs... formatter) {
+    String& format(const S fstr, const Strs... formatter) {
         replaceFirst("{%}", fstr);
         replaceFirst("{%}", formatter...);
         return *this;
@@ -383,7 +442,7 @@ class String {
     }
 
     template<typename S>
-    void print(S s, S separator = "") {
+    void print(const S s, const S separator = "") {
         std::cout << getStdStr(s) << separator;
     }
 
@@ -393,6 +452,16 @@ class String {
         print(strs..., separator);
         std::cout << std::endl;
     }
+
+    // iterator
+    iterator begin() { return m_str.begin(); }
+    iterator end() { return m_str.end(); }
+    reverse_iterator rbegin() { return m_str.rbegin(); }
+    reverse_iterator rend() { return m_str.rend(); }
+    const_iterator cbegin() { return m_str.cbegin(); }
+    const_iterator cend() { return m_str.cend(); }
+    const_reverse_iterator crbegin() { return m_str.crbegin(); }
+    const_reverse_iterator crend() { return m_str.crend(); }
 
     // operator
     operator std::string() const{
@@ -405,37 +474,37 @@ class String {
     }
 
     template<typename S>
-    bool operator== (S s) {
+    bool operator== (const S s) {
         return (m_str.compare(getStdStr(s)) == 0);
     }
 
     template<typename S>
-    bool operator!= (S s) {
+    bool operator!= (const S s) {
         return (m_str.compare(getStdStr(s)) != 0);
     }
 
     template<typename S>
-    bool operator< (S s) {
+    bool operator< (const S s) {
         return (m_str.length() < getStdStr(s).length());
     }
 
     template<typename S>
-    bool operator<= (S s) {
+    bool operator<= (const S s) {
         return (m_str.length() <= getStdStr(s).length());
     }
 
     template<typename S>
-    bool operator> (S s) {
+    bool operator> (const S s) {
         return (m_str.length() > getStdStr(s).length());
     }
 
     template<typename S>
-    bool operator>= (S s) {
+    bool operator>= (const S s) {
         return (m_str.length() >= getStdStr(s).length());
     }
 
     template<typename S>
-    String& operator+= (S s) {
+    String& operator+= (const S s) {
         m_str += getStdStr(s);
         return *this;
     }
@@ -445,7 +514,7 @@ class String {
         return String(m_str + getStdStr(s));
     }
 
-    String operator*(int mul) {
+    String operator*(const int mul) {
         std::string str;
         for(int i = 0; i < mul; i++) {
             str += m_str;
@@ -453,16 +522,20 @@ class String {
         return String(str);
     }
 
-    String operator*=(int mul) {
+    String operator*=(const int mul) {
         for(int i = 0; i < mul; i++) {
             m_str += m_str;
         }
         return *this;
     }
 
-    std::vector<String> operator/(int div) {
+    std::vector<String> operator/(const int div) {
+        if(div == 0) {
+            throw std::overflow_error("str::String divide by zero exception");
+        }
         if(this->length() < div) {
-            throw std::out_of_range("String.length() has to be greater or equal divisor");
+            throw std::out_of_range(
+                    "str::String.length() has to be greater or equal divisor");
         }
         std::vector<String> vec;
         int start, end, len, j = 0;
@@ -477,7 +550,7 @@ class String {
         return vec;
     }
 
-    char& operator[] (int pos) {
+    char& operator[] (const int pos) {
         return this->m_str[pos];
     }
 

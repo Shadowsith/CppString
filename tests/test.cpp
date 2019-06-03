@@ -361,28 +361,51 @@ void t_trim() {
     message(s == "hello", "trim");
 }
 
-void t_trimLeft() {
+void t_trimHead() {
     String s = "   hello     ";
-    s.trimLeft();
-    message(s == "hello     ", "trimLeft");
+    s.trimHead();
+    message(s == "hello     ", "trimHead");
 }
 
-void t_trimRight() {
+void t_trimTail() {
     String s = "   hello     ";
-    s.trimRight();
-    message(s == "   hello", "trimRight");
+    s.trimTail();
+    message(s == "   hello", "trimTail");
 }
 
-void t_fillLeft_padLeft() {
+void t_fillHead_padLeft() {
     String s = "111";
-    s.fillLeft(3,'X');
-    message(s == "XXX111", "fillLeft/padLeft");
+    s.fillHead(3,'X');
+    message(s == "XXX111", "fillHead/padLeft");
 }
 
-void t_fillRight_padRight() {
+void t_fillTail_padRight() {
     String s = "111";
-    s.fillRight(3, 'X');
-    message(s == "111XXX", "fillRight/padRigth");
+    s.fillTail(3, 'X');
+    message(s == "111XXX", "fillTail/padRigth");
+}
+
+void t_insert() {
+    String s = "hello";
+    String s1 = "bar";
+    s.insert(5, " World");
+    s1.insert(0, "foo ");
+    message(s == "hello World" && s1 == "foo bar", "insert");
+}
+
+void t_startsWith() {
+    String s = "hello World";
+    message(s.startsWith("hello") && !s.startsWith("bar"), "startsWith");
+}
+
+void t_endsWith() {
+    String s = "hello World";
+    message(s.endsWith("World") && !s.endsWith("foo"), "endsWith");
+}
+
+void t_contains() {
+    String s = "you are the best";
+    message(s.contains("are") && !s.contains("not"), "contains");
 }
 
 void t_op_declaration() {
@@ -483,6 +506,10 @@ int main(void)
     t_length_size();
     t_concat();
     t_copyTo();
+    t_insert();
+    t_contains();
+    t_startsWith();
+    t_endsWith();
     t_find_findAll();
     t_findFirst_indexOf();
     t_findLast_lastIndexOf();
@@ -499,10 +526,10 @@ int main(void)
     t_toUpper();
     t_toLower();
     t_trim();
-    t_trimLeft();
-    t_trimRight();
-    t_fillLeft_padLeft();
-    t_fillRight_padRight();
+    t_trimHead();
+    t_trimTail();
+    t_fillHead_padLeft();
+    t_fillTail_padRight();
     t_stdin();
 
     std::cout << std::endl;
