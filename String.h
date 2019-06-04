@@ -342,6 +342,11 @@ class String {
         return parts;
     }
 
+    String& reverse() {
+        std::reverse(m_str.begin(), m_str.end());
+        return *this;
+    }
+
     void swap(std::string &str2) {
         std::string str3 = m_str;
         m_str = str2;
@@ -442,13 +447,13 @@ class String {
     }
 
     template<typename S>
-    void print(const S s, const S separator = "") {
-        std::cout << getStdStr(s) << separator;
+    void print(const S str, const S separator = "") {
+        std::cout << getStdStr(str) << separator;
     }
 
     template<typename S, typename ... Strings>
-    void print(S separator, S s, Strings... strs) {
-        print(s, separator);
+    void print(S separator, S str, Strings... strs) {
+        print(str, separator);
         print(strs..., separator);
         std::cout << std::endl;
     }
