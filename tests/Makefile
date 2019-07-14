@@ -1,10 +1,10 @@
 all:
 	@mkdir -p ./bin/
-	@g++ test.cpp ./lib/textformatpp.cpp -o ./bin/test
+	@g++ unit.cpp -o ./bin/unit
 	@g++ performance.cpp -o ./bin/performance
 run:
 	@make all
-	./bin/test
+	./bin/unit
 perf:
 	@make all
 	./bin/performance
