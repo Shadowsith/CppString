@@ -91,6 +91,13 @@ TEST_CASE( "String char at", "[char_at]" ) {
     REQUIRE(s.charAt(2) == 'y');
 }
 
+TEST_CASE( "String insert", "[insert]" ) {
+    String s = "hello";
+    std::string str = "world ";
+    REQUIRE(s.insert(0, str) == "world hello");
+    REQUIRE(s.insert(0, "world ") == "world hello");
+}
+
 TEST_CASE( "String find, contains", "[find]" ) {
     String s = "hello world!";
     REQUIRE( s.findFirst("e") == 1 );
@@ -101,6 +108,7 @@ TEST_CASE( "String find, contains", "[find]" ) {
     REQUIRE( s.find("o")[0] == 4 );
     REQUIRE( s.find("o")[1] == 7 );
     REQUIRE( s.contains("world") == true );
+    REQUIRE( s.count("l") == 3 );
 }
 
 TEST_CASE( "String erase", "[erase]" ) {
@@ -109,8 +117,7 @@ TEST_CASE( "String erase", "[erase]" ) {
     REQUIRE(s.eraseFirst(std::string("hello ")) == "world, hello space");
     REQUIRE(s.eraseLast(String("hello ")) == "hello world, space");
     REQUIRE(s.eraseHead(6) == "world, hello space");
-    // TODO does not work
-    // REQUIRE(s.eraseLast(13) == "hello world");
+    REQUIRE(s.eraseTail(13) == "hello world");
 }
 
 TEST_CASE( "String replace", "[replace]" ) {
@@ -119,8 +126,7 @@ TEST_CASE( "String replace", "[replace]" ) {
     REQUIRE(s.replaceFirst("world", std::string("earth")) == "hello earth, hello space");
     REQUIRE(s.replaceLast("hello", String("hey")) == "hello world, hey space");
     REQUIRE(s.replaceHead(5, "hey") == "hey world, hello space");
-    // TODO exception
-    // REQUIRE(s.replaceTail(5, "moon") == "hello world, hello moon");
+    REQUIRE(s.replaceTail(5, "moon") == "hello world, hello moon");
 }
 
 TEST_CASE( "String trim", "[trim]" ) {
@@ -144,6 +150,12 @@ TEST_CASE( "String operators", "[operators]" ) {
     REQUIRE(s0 < "hello");
     REQUIRE(String("hello") > str);
     REQUIRE(String("hello") <= "hello");
-    REQUIRE(String("hello") >= "hey");
-    REQUIRE(String("he") += "llo" == "hello");
+    REQUIRE(String("hello") >= std::string("hey"));
+    REQUIRE((String("he") += "llo") == "hello");
+    REQUIRE((String("he") + "llo") == "hello"); 
+    REQUIRE((String("he") * 3) == "hehehe");
+    REQUIRE((String("he") *= 2) == std::string("hehehehe"));
+    REQUIRE((String("hello") / 5).size() == 5);
+    REQUIRE((String("hello") / 5)[0] == 'h');
+    REQUIRE(String("world")[0] == 'w');
 }

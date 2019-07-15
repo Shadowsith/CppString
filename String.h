@@ -237,19 +237,19 @@ class String {
         return concat(str);
     }
 
-    void copyTo(String &s) { s._str = _str; }
-    void copyTo(std::string &s) { s = _str; }
+    void copyTo(String& s) { s._str = _str; }
+    void copyTo(std::string& s) { s = _str; }
 
     int count(const std::string& str) {
-        return this->find(str).size();
+        return find(str).size();
     }
 
     int count(const String& str) {
-        return this->find(str._str).size();
+        return find(str._str).size();
     }
 
     int count(const char* str) {
-        return this->find(std::string(str)).size();
+        return find(std::string(str)).size();
     }
 
     String insert(const int start, const std::string& str) {
@@ -264,7 +264,20 @@ class String {
     String insert(const int start, const char* str) {
         return insert(start, std::string(str));
     }
-    
+
+    String append(const std::string& str) {
+        std::string s = _str;
+        return String(s.append(str));
+    }
+
+    String append(const String& str) {
+        return append(str._str);
+    }
+
+    String append(const char* c) {
+        return append(std::string(c));
+    }
+
     std::vector<int> find(const std::string& str) {
         std::vector<int> vec;
         std::size_t pos = _str.find(str);
@@ -406,7 +419,7 @@ class String {
 
     String replaceTail(const int tailsize, const std::string& new_str) {
         std::string s = _str;
-        s.erase(_str.end()-tailsize, s.end());
+        s.erase(s.end()-tailsize, s.end());
         s += new_str;
         return String(s);
     }
@@ -438,6 +451,18 @@ class String {
         return erase(std::string(erase_str));   
     }
 
+    inline String remove(const std::string& str) {
+        return erase(str);
+    }
+
+    inline String remove(const String& str) {
+        return erase(str);
+    }
+
+    inline String remove(const char* str) {
+        return erase(str);
+    }
+
     String eraseFirst(const std::string& erase_str) {
         std::string str = _str;
         std::string s = erase_str;
@@ -454,6 +479,18 @@ class String {
 
     String eraseFirst(const char* erase_str) {
         return eraseFirst(std::string(erase_str));
+    }
+
+    inline String removeFirst(const std::string& str) {
+        return eraseFirst(str);
+    }
+
+    inline String removeFirst(const String& str) {
+        return eraseFirst(str);
+    }
+
+    inline String removeFirst(const char* str) {
+        return eraseFirst(str);
     }
 
     String eraseLast(const std::string& erase_str) {
@@ -474,9 +511,21 @@ class String {
         return eraseLast(std::string(erase_str));
     }
 
+    inline String removeLast(const std::string& str) {
+        return eraseLast(str);
+    }
+
+    inline String removeLast(const String& str) {
+        return eraseLast(str);
+    }
+
+    inline String removeLast(const char* str) {
+        return eraseLast(str);
+    }
+
     String eraseHead(const int headsize) {
         std::string str = _str;
-        str.erase(0,headsize);
+        str.erase(0, headsize);
         return String(str);
     }
 
@@ -710,11 +759,11 @@ class String {
         return (_str.length() < std::string(s).length());
     }
 
-    bool operator<= (const std::string s) const {
+    bool operator<= (const std::string& s) const {
         return (_str.length() <= s.length());
     }
 
-    bool operator<= (const String s) const {
+    bool operator<= (const String& s) const {
         return (_str.length() <= s._str.length());
     }
 
@@ -722,11 +771,11 @@ class String {
         return (_str.length() <= std::string(s).length());
     }
 
-    bool operator> (std::string s) const {
+    bool operator> (const std::string& s) const {
         return (_str.length() > s.length());
     }
 
-    bool operator> (String s) const {
+    bool operator> (const String& s) const {
         return (_str.length() > s._str.length());
     }
 
@@ -734,11 +783,11 @@ class String {
         return (_str.length() > std::string(s).length());
     }
 
-    bool operator>= (std::string s) {
+    bool operator>= (const std::string& s) const {
         return (_str.length() >= s.length());
     }
 
-    bool operator>= (String s) const {
+    bool operator>= (String& s) const {
         return (_str.length() >= s.length());
     }
 
